@@ -31,7 +31,6 @@ export default createStore({
                 } else {
                     commit('setToken', usuarioDB.token)
                     localStorage.setItem('token2', usuarioDB.token)
-                    localStorage.setItem('email', usuario.email)
                 }
                 // this.datosUser(usuario.email)
                 router.push({ name: 'Dashboard' }).catch(() => {});
@@ -64,18 +63,17 @@ export default createStore({
             }
         },
         async datosUser() {
-            const email = localStorage.getItem('email')
+            console.log(this.state.toke)
             try {
                 const res = await fetch(this.state.url + 'api/user/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email: email })
+                        'x-access-token': this.state.toke
+                    }
                 })
                 const usuarioDB = await res.json()
-                const user = usuarioDB[0];
-                // console.log(user)
+                const user = usuarioDB;                
                 return user
             } catch (error) {
                 console.log('error: ', error)

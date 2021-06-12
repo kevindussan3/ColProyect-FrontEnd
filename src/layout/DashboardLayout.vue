@@ -80,7 +80,7 @@
 
           <sidebar-item
             :link="{
-              name: 'Materias',
+              name: 'Grado',
               icon: 'ni ni-planet text-blue',
               path: '/icons',
             }"

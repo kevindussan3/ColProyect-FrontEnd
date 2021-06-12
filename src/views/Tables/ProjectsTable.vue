@@ -4,18 +4,30 @@
       class="card-header border-0"
       :class="type === 'dark' ? 'bg-transparent' : ''"
     >
-      
-
       <div class="row align-items-center">
         <div class="col">
           <h3 class="mb-0" :class="type === 'dark' ? 'text-white' : ''">
             {{ title }}
           </h3>
+          <div class="input-group">
+            <select
+              class="custom-select"
+              @change="usuarios"
+              v-model="tipo"
+              id="inputGroupSelect04"
+            >
+              <option selected value="/">Usuarios</option>
+              <option value="/listar/docente">Docente</option>
+              <option value="/listar/estudiante">Estudiante</option>
+              <option value="/listar/acudiente">Acudiente</option>
+            </select>
+          </div>
         </div>
         <div class="col text-right">
           <button class="btn btn-primary btn-sm" @click="crearUsuario()">
             Crear Usuario
           </button>
+
           <button class="btn btn-primary btn-sm" @click="cambiarStado()">
             Change State
           </button>
@@ -37,7 +49,7 @@
           <th>Apellidos</th>
           <th>Identificacion</th>
           <th>Telefono</th>
-          <th>Rol</th>
+
           <th>Acciones</th>
         </template>
 
@@ -59,9 +71,7 @@
           <td class="budget">
             {{ row.item.telefono }}
           </td>
-          <td class="budget">
-            {{ row.item.roles[0].name }}
-          </td>
+
           <td>
             <!-- Form editar -->
             <form role="form">
@@ -107,6 +117,19 @@
                                   placeholder="Apellidos"
                                   v-model="model.apellidos"
                                 />
+                              </div>
+                              <div class="form-group col-md-4">
+                                <!-- <label for="inputState">Rol</label> -->
+                                <select
+                                  class="form-control"
+                                  v-model="model.jornada"
+                                >
+                                  <option selected disabled>
+                                    Selecciona Jornada
+                                  </option>
+                                  <option>Mañana</option>
+                                  <option>Tarde</option>
+                                </select>
                               </div>
                             </div>
                             <div class="form-row">
@@ -262,6 +285,19 @@
                                   v-model="modelCrear.direccion"
                                 />
                               </div>
+                              <div class="form-group col-md-4">
+                                <!-- <label for="inputState">Rol</label> -->
+                                <select
+                                  class="form-control"
+                                  v-model="modelCrear.jornada"
+                                >
+                                  <option selected disabled>
+                                    Selecciona Jornada
+                                  </option>
+                                  <option>Mañana</option>
+                                  <option>Tarde</option>
+                                </select>
+                              </div>
                             </div>
 
                             <div class="column">
@@ -348,15 +384,15 @@
             <!-- fin -->
 
             <div class="row">
-              <button
+              <div
                 class="btn btn-primary btn-sm"
                 @click="verUsuario(row.item._id)"
               >
-                Ver
-              </button>
-              <button class="btn btn-success btn-sm" @click="datosmodal(row)">
-                Editar
-              </button>
+                <i class="fa fa-eye"></i>
+              </div>
+              <div class="btn btn-success btn-sm" @click="datosmodal(row)">
+                <i class="fa fa-edit"></i>
+              </div>
               <div
                 class="btn btn-danger btn-sm"
                 @click="eliminar(row.item._id)"
@@ -381,7 +417,6 @@
 <script>
 import { mapState } from "vuex";
 
-
 import router from "../../router";
 export default {
   name: "projects-table",
@@ -393,6 +428,7 @@ export default {
   },
   data() {
     return {
+      tipo: "/",
       url: this.$store.state.url,
       tableData: [],
       loading: false,
@@ -410,6 +446,7 @@ export default {
         direccion: "",
         rh: "",
         roles: "",
+        jornada: "",
       },
       modelCrear: {
         nombres: "",
@@ -422,18 +459,18 @@ export default {
         password: "",
         rh: "",
         roles: "Rol",
+        jornada: "",
       },
       ShowRoles: ["estudiante", "admin", "docente", "acudiente"],
       rol: "",
     };
   },
-  components: {
-
-  },
+  components: {},
   methods: {
     async usuarios() {
       try {
-        const res = await fetch(this.url + "api/admin", {
+        console.log(this.tipo);
+        const res = await fetch(this.url + `api/admin${this.tipo}`, {
           headers: {
             "Content-Type": "application/json",
             "x-access-token": this.toke,
@@ -454,6 +491,7 @@ export default {
       this.showModalCreate = true;
     },
     datosmodal(index) {
+      console.log(index);
       this.showModal = true;
       this.id = index.item._id;
       this.model.nombres = index.item.nombres;
@@ -465,6 +503,7 @@ export default {
       this.model.rh = index.item.rh;
       this.rol = index.item.roles[0]._id;
       this.model.roles = index.item.roles[0].name;
+      this.model.jornada = index.item.jornada;
       console.log(index.item.nombres);
     },
     async editar(index) {
@@ -477,15 +516,14 @@ export default {
           },
           body: JSON.stringify(this.model),
         });
-
         this.showModal = false;
+        alert("Se ha editado corretamente");
         this.refresh();
       } catch (error) {
         console.log(error);
       }
     },
     async eliminar(index) {
-      console.log(index);
       try {
         await fetch(this.url + `api/admin/${index}`, {
           method: "DELETE",
@@ -493,8 +531,9 @@ export default {
             "Content-Type": "application/json",
             "x-access-token": this.toke,
           },
-        })
-  
+        });
+        alert("Se ha eleminidado");
+
         this.refresh();
       } catch (error) {
         console.log(error);
@@ -524,7 +563,7 @@ export default {
           body: JSON.stringify(this.modelCrear),
         });
         this.showModalCreate = false;
-
+        alert("Se ha crado nuevo usuario");
         this.refresh();
       } catch (error) {
         console.log("error: ", error);

@@ -121,13 +121,13 @@
               <div class="pl-lg-4">
                 <div class="row">
                   <div class="col-lg-6">
-                    <base-input
-                      alternative=""
-                      label="Username"
-                      placeholder="Username"
-                      input-classes="form-control-alternative"
-                      v-model="model.username"
-                    />
+                      <base-input
+                        alternative=""
+                        label="Username"
+                        placeholder="Username"
+                        class="h5 font-weight-300"
+                        v-model="model.username"
+                      />
                   </div>
                   <div class="col-lg-6">
                     <base-input

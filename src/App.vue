@@ -5,7 +5,9 @@
 </template>
 
 <script>
+   
 export default {
-  
+
+  // register globally
 }
 </script>

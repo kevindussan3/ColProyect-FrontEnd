@@ -77,10 +77,10 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-import Notificaciones from "../components/Notificaciones"
+
 
 export default {
-  components: { Notificaciones },
+  
   data() {
     return {
       usuario: {

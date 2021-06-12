@@ -101,25 +101,25 @@
                 <div class="row">
                   <div class="col-lg-6">
                     <h5>Identificacion</h5>
-                    <h4>{{ identificacion }}</h4>
+                    <div class="h4 font-weight-300">{{ identificacion }}</div>
                   </div>
                   <div class="col-lg-6">
                     <h5>Correo Elctrónico</h5>
-                    <h4>{{ email }}</h4>
+                    <div class="h4 font-weight-300">{{ email }}</div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-lg-6">
                    <h5>Nombres</h5>
-                    <h4>{{ nombres }}</h4>
+                   <div class="h4 font-weight-300">{{ nombres }}</div>
                   </div>
                   <div class="col-lg-6">
                     <h5>Apellidos</h5>
-                    <h4>{{ apellidos }}</h4>
+                    <div class="h4 font-weight-300">{{ apellidos }}</div>
                   </div>
                   <div class="col-lg-6">
                     <h5>Grupo sanguineo</h5>
-                    <h4>{{ rh }}</h4>
+                    <div class="h4 font-weight-300">{{ rh }}</div>
                   </div>
                 </div>
               </div>
@@ -132,9 +132,9 @@
                 <div class="row">
                   <div class="col-md-12">
                    <h5>Dirección</h5>
-                    <h4>{{ direccion }}</h4>
+                    <div class="h4 font-weight-300">{{ direccion }}</div>
                      <h5>Telefono</h5>
-                    <h4>{{ telefono }}</h4>
+                    <div class="h4 font-weight-300">{{ telefono }}</div>
                   </div>
                 </div>
                 <div class="row">
