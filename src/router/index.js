@@ -13,6 +13,7 @@ import Profile from "../views/UserProfile.vue";
 import Tables from "../views/Tables.vue";
 import Usuarios from "../views/Usuarios.vue";
 import Materia from "../views/materias/view_matters.vue";
+import Grado from "../views/Grado/view_grado.vue";
 
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
@@ -64,6 +65,11 @@ const routes = [
                 path: "/verUsuario/:id",
                 name: "verUsuario",
                 components: { default: VerUsuario },
+            },
+            {
+                path: "/grados",
+                name: "grado",
+                components: { default: Grado },
             },
 
         ],

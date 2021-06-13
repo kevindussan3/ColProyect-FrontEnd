@@ -80,9 +80,9 @@
 
           <sidebar-item
             :link="{
-              name: 'Grado',
-              icon: 'ni ni-planet text-blue',
-              path: '/icons',
+              name: 'Grados',
+              icon: 'fa fa-square text-blue',
+              path: '/grados',
             }"
           />
           <sidebar-item
