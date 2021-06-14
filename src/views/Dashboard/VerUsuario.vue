@@ -121,6 +121,10 @@
                     <h5>Grupo sanguineo</h5>
                     <div class="h4 font-weight-300">{{ rh }}</div>
                   </div>
+                  <div class="col-lg-6">
+                    <h5>Jornada</h5>
+                    <div class="h4 font-weight-300">{{ jornada }}</div>
+                  </div>
                 </div>
               </div>
               <hr class="my-4" />
@@ -205,6 +209,7 @@ export default {
       direccion: "",
       rh: "",
       roles: "",
+      jornada: "",
       user: [],
       id: this.$route.params.id,
     };
@@ -232,6 +237,7 @@ export default {
           this.direccion = value.direccion;
           this.rh = value.rh;
           this.roles = value.roles[0].name;
+          this.jornada = value.jornada;
         });
         console.log(this.user);
       } catch (error) {

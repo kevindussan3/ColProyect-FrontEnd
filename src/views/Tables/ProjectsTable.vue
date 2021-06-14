@@ -124,11 +124,11 @@
                                   class="form-control"
                                   v-model="model.jornada"
                                 >
-                                  <option selected disabled>
-                                    Selecciona Jornada
+                                  <option selected value="">
+                                    Selecciona una joranada
                                   </option>
-                                  <option>Mañana</option>
-                                  <option>Tarde</option>
+                                  <option value="Mañana">Mañana</option>
+                                  <option value="Tarde">Tarde</option>
                                 </select>
                               </div>
                             </div>
@@ -291,11 +291,11 @@
                                   class="form-control"
                                   v-model="modelCrear.jornada"
                                 >
-                                  <option selected disabled>
-                                    Selecciona Jornada
+                                  <option selected value="">
+                                    Joranada
                                   </option>
-                                  <option>Mañana</option>
-                                  <option>Tarde</option>
+                                  <option value="Mañana">Mañana</option>
+                                  <option value="Tarde">Tarde</option>
                                 </select>
                               </div>
                             </div>
@@ -469,7 +469,6 @@ export default {
   methods: {
     async usuarios() {
       try {
-        console.log(this.tipo);
         const res = await fetch(this.url + `api/admin${this.tipo}`, {
           headers: {
             "Content-Type": "application/json",
@@ -477,7 +476,6 @@ export default {
           },
         });
         this.tableData = await res.json();
-        console.log(this.tableData);
       } catch (error) {
         console.log(error);
       }
@@ -491,7 +489,6 @@ export default {
       this.showModalCreate = true;
     },
     datosmodal(index) {
-      console.log(index);
       this.showModal = true;
       this.id = index.item._id;
       this.model.nombres = index.item.nombres;
@@ -504,7 +501,6 @@ export default {
       this.rol = index.item.roles[0]._id;
       this.model.roles = index.item.roles[0].name;
       this.model.jornada = index.item.jornada;
-      console.log(index.item.nombres);
     },
     async editar(index) {
       try {
@@ -549,7 +545,6 @@ export default {
       });
     },
     verUsuario(index) {
-      // console.log(index)
       router.push(`/verUsuario/${index}`);
     },
     async crearUser() {
@@ -562,6 +557,7 @@ export default {
           },
           body: JSON.stringify(this.modelCrear),
         });
+        this.modelCrear = "";
         this.showModalCreate = false;
         alert("Se ha crado nuevo usuario");
         this.refresh();

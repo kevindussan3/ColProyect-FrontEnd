@@ -12,7 +12,7 @@
         </div>
         <div class="col text-right">
           <button class="btn btn-primary btn-sm" @click="crearGrado()">
-            Crear Materia
+            Crear Grado
           </button>
         </div>
       </div>
@@ -25,6 +25,7 @@
         :thead-classes="type === 'dark' ? 'thead-dark' : 'thead-light'"
         tbody-classes="list"
         :data="tableData"
+        v-if="tableData.length != 0"
       >
         <template v-slot:columns>
           <th>Grado</th>
@@ -42,81 +43,6 @@
             {{ row.item.jornada }}
           </td>
           <td>
-            <!-- Form Crear -->
-            <form role="form">
-              <div v-if="showModalCreate">
-                <transition name="modal">
-                  <div class="modal-mask">
-                    <div class="modal-wrapper">
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title">Crear Grado</h5>
-                            <button
-                              type="button"
-                              class="close"
-                              data-dismiss="modal"
-                              aria-label="Close"
-                            >
-                              <span
-                                aria-hidden="true"
-                                @click="showModalCreate = false"
-                                >&times;</span
-                              >
-                            </button>
-                          </div>
-                          <div class="modal-body">
-                            <div class="form-row">
-                              <div class="form-group col-md-6">
-                                <!-- <label for="inputName4">Nombres</label> -->
-                                <input
-                                  type="number"
-                                  class="form-control"
-                                  placeholder="Nombre de la materia"
-                                  v-model="modelCrear.numero_grado"
-                                  required
-                                />
-                              </div>
-                              <div class="form-group col-md-6">
-                                <!-- <label for="inputTelefono4">Telefono</label> -->
-                                <select
-                                  class="form-control"
-                                  v-model="modelCrear.jornada"
-                                >
-                                  <option selected value="">
-                                    Selecciona una joranada
-                                  </option>
-                                  <option value="mañana">Mañana</option>
-                                  <option value="tarde">Tarde</option>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div class="modal-footer">
-                            <button
-                              type="button"
-                              class="btn btn-danger"
-                              @click="showModalCreate = false"
-                            >
-                              Cerrar
-                            </button>
-                            <button
-                              type="button"
-                              class="btn btn-primary"
-                              @click="guardarGrado()"
-                            >
-                              Crear Grado
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </transition>
-              </div>
-            </form>
-
             <div class="row">
               <button
                 class="btn btn-danger btn-sm"
@@ -128,8 +54,77 @@
           </td>
         </template>
       </base-table>
-    </div>
 
+      <div v-else class="text-center"><h1>No hay datos crea uno</h1></div>
+      <!-- Form Crear -->
+
+      <div v-if="showModalCreate">
+        <transition name="modal">
+          <div class="modal-mask">
+            <div class="modal-wrapper">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Crear Grado</h5>
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true" @click="showModalCreate = false"
+                        >&times;</span
+                      >
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="" @submit="checkForm">
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <!-- <label for="inputName4">Nombres</label> -->
+                          <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Numero de grado"
+                            v-model="modelCrear.numero_grado"
+                            required
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <!-- <label for="inputTelefono4">Telefono</label> -->
+                          <select
+                            class="form-control"
+                            v-model="modelCrear.jornada"
+                          >
+                            <option selected value="">
+                              Selecciona una joranada
+                            </option>
+                            <option value="Mañana">Mañana</option>
+                            <option value="Tarde">Tarde</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-danger"
+                          @click="showModalCreate = false"
+                        >
+                          Cerrar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                          Crear Grado
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </transition>
+      </div>
+    </div>
     <div
       class="card-footer d-flex justify-content-end"
       :class="type === 'dark' ? 'bg-transparent' : ''"
@@ -141,7 +136,6 @@
 
 <script>
 import { mapState } from "vuex";
-
 import router from "../../router";
 export default {
   name: "projects-table",
@@ -156,6 +150,7 @@ export default {
       url: this.$store.state.url,
       tableData: [],
       loading: false,
+      errors: [],
       showModalCreate: false,
       modelCrear: {
         numero_grado: "",
@@ -165,6 +160,38 @@ export default {
   },
   components: {},
   methods: {
+    checkForm: function (e) {
+      e.preventDefault();
+
+      this.errors = [];
+
+      if (this.modelCrear.numero_grado === "") {
+        this.errors.push("El numero grado del producto es obligatorio.");
+      } else if (this.modelCrear.jornada == "") {
+        this.errors.push("El jornada del producto es obligatorio.");
+      } else {
+        fetch("http://localhost:4000/api/admin/createGrade", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": this.toke,
+          },
+          body: JSON.stringify(this.modelCrear),
+        })
+          .then((res) =>  res.json())
+          .then((res) => {
+            if (res.message) {
+              alert(res.message)
+            } else {
+              this.modelCrear.numero_grado = "";
+              this.modelCrear.jornada = "";
+              this.showModalCreate = false;
+              alert("Se ha crado el grado");
+              this.refresh();
+            }
+          });
+      }
+    },
     async grado() {
       try {
         const res = await fetch(this.url + "api/admin/getGrade", {
@@ -173,13 +200,13 @@ export default {
             "x-access-token": this.toke,
           },
         });
-        this.tableData = await res.json();
+
+        this.tableData = await res.json();      
       } catch (error) {
         console.log(error);
       }
     },
     async guardarGrado() {
-      console.log(this.modelCrear);
       try {
         await fetch("http://localhost:4000/api/admin/createGrade", {
           method: "POST",
@@ -189,11 +216,14 @@ export default {
           },
           body: JSON.stringify(this.modelCrear),
         });
+        this.modelCrear.numero_grado = "";
+        this.modelCrear.jornada = "";
+
         this.showModalCreate = false;
         alert("Se ha crado el grado");
         this.refresh();
       } catch (error) {
-        alert('Ha pasado algo')
+        console.log(error);
       }
     },
     async refresh() {
@@ -204,26 +234,7 @@ export default {
     async crearGrado() {
       this.showModalCreate = true;
     },
-
-    // async editar(index) {
-    //   try {
-    //     // await fetch(this.url + `api/admin/${index}`, {
-    //     //   method: "PUT",
-    //     //   headers: {
-    //     //     "Content-Type": "application/json",
-    //     //     "x-access-token": this.toke,
-    //     //   },
-    //     //   body: JSON.stringify(this.model),
-    //     // });
-
-    //     // this.showModal = false;
-    //     // this.refresh();
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
     async eliminar(index) {
-      console.log(index);
       try {
         await fetch(this.url + `api/admin/deleteGradeId/${index}`, {
           method: "DELETE",
@@ -248,7 +259,6 @@ export default {
       });
     },
     verUsuario(index) {
-      // console.log(index)
       router.push(`/verUsuario/${index}`);
     },
   },

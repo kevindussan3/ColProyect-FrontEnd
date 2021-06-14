@@ -17,7 +17,6 @@
         </div>
       </div>
     </div>
-
     <div class="table-responsive">
       <base-table
         class="table align-items-center table-flush"
@@ -25,6 +24,7 @@
         :thead-classes="type === 'dark' ? 'thead-dark' : 'thead-light'"
         tbody-classes="list"
         :data="tableData"
+        v-if="tableData.length != 0"
       >
         <template v-slot:columns>
           <th>Nombre Materia</th>
@@ -33,7 +33,6 @@
           <th>Jornada</th>
           <th>Acciones</th>
         </template>
-
         <template v-slot:default="row">
           <td>
             <div class="media-body">
@@ -56,109 +55,6 @@
             {{ row.item.jornada }}
           </td>
           <td>
-            <!-- Form Crear -->
-            <form role="form">
-              <div v-if="showModalCreate">
-                <transition name="modal">
-                  <div class="modal-mask">
-                    <div class="modal-wrapper">
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title">Crear Materia</h5>
-                            <button
-                              type="button"
-                              class="close"
-                              data-dismiss="modal"
-                              aria-label="Close"
-                            >
-                              <span
-                                aria-hidden="true"
-                                @click="showModalCreate = false"
-                                >&times;</span
-                              >
-                            </button>
-                          </div>
-                          <div class="modal-body">
-                            <div class="form-row">
-                              <div class="form-group col-md-6">
-                                <!-- <label for="inputName4">Nombres</label> -->
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  placeholder="Nombre de la materia"
-                                  v-model="modelCrear.nombre_materia"
-                                />
-                              </div>
-                              <div class="form-group col-md-6">
-                                <!-- <label for="inputTelefono4">Telefono</label> -->
-                                <select
-                                  class="form-control"
-                                  @change="materias"
-                                  v-model="modelCrear.jornada"
-                                >
-                                  <option selected value="">
-                                    Selecciona una joranada
-                                  </option>
-                                  <option value="mañana">Mañana</option>
-                                  <option value="tarde">Tarde</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="form-group col-md-6">
-                                <Multiselect
-                                  v-model="modelCrear.grados"
-                                  placeholder="Selecciona grados"
-                                  
-                                  mode="tags"
-                                  :options="grados"
-                                />
-                              </div>
-                              <div class="form-group col-md-6">
-                                <!-- <label for="inputTelefono4">Telefono</label> -->
-                                <select
-                                  class="form-control"
-                                  v-model="modelCrear.docente"
-                                >
-                                  <option value="" selected disabled>
-                                    Selecciona un docente
-                                  </option>
-                                  <option
-                                    v-for="(item, index) in infodocente.data"
-                                    :key="index"  v-bind:value="{id: item._id}"
-                                  >
-                                    {{ item.nombres }} {{ item.apellidos }}
-                                  </option>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div class="modal-footer">
-                            <button
-                              type="button"
-                              class="btn btn-danger"
-                              @click="showModalCreate = false"
-                            >
-                              Cerrar
-                            </button>
-                            <button
-                              type="button"
-                              class="btn btn-primary"
-                              @click="crearMateria()"
-                            >
-                              Crear Materia
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </transition>
-              </div>
-            </form>
-
             <div class="row">
               <button
                 class="btn btn-danger btn-sm"
@@ -170,6 +66,109 @@
           </td>
         </template>
       </base-table>
+      <div v-else class="text-center"><h1>No hay datos crea uno</h1></div>
+
+      <!-- Form Crear -->
+      <div v-if="showModalCreate">
+        <transition name="modal">
+          <div class="modal-mask">
+            <div class="modal-wrapper">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Crear Materia</h5>
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true" @click="showModalCreate = false"
+                        >&times;</span
+                      >
+                    </button>
+                  </div>
+                  <form role="form" action="" @submit="checkForm">
+                    <div class="modal-body">
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <!-- <label for="inputName4">Nombres</label> -->
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Nombre de la materia"
+                            v-model="modelCrear.nombre_materia"
+                            required
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <!-- <label for="inputTelefono4">Telefono</label> -->
+                          <select
+                            class="form-control"
+                            @change="materias"
+                            v-model="modelCrear.jornada"
+                            required
+                          >
+                            <option selected value="">
+                              Selecciona una joranada
+                            </option>
+                            <option value="Mañana">Mañana</option>
+                            <option value="Tarde">Tarde</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <Multiselect
+                            v-model="modelCrear.grados"
+                            placeholder="Selecciona grados"
+                            required
+                            mode="tags"
+                            :options="grados"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <!-- <label for="inputTelefono4">Telefono</label> -->
+                          <select
+                            class="form-control"
+                            v-model="modelCrear.profesor"
+                            requiredsss
+                          >
+                            <option value="" selected disabled>
+                              Selecciona un docente
+                            </option>
+                            <option
+                              v-for="(item, index) in infodocente.data"
+                              :key="index"
+                              v-bind:value="{ _id: item._id }"
+                            >
+                           
+                              {{ item.nombres }} {{ item.apellidos }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        @click="showModalCreate = false"
+                      >
+                        Cerrar
+                      </button>
+                      <button type="submit" class="btn btn-primary">
+                        Crear materia
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </transition>
+      </div>
     </div>
 
     <div
@@ -180,11 +179,9 @@
     </div>
   </div>
 </template>
-
 <script>
 import { mapState } from "vuex";
 import Multiselect from "@vueform/multiselect";
-
 import router from "../../router";
 export default {
   name: "projects-table",
@@ -199,6 +196,7 @@ export default {
       value: [],
       url: this.$store.state.url,
       tableData: [],
+      errors: [],
       infodocente: [],
       grados: [],
       loading: false,
@@ -208,7 +206,7 @@ export default {
         nombre_materia: "",
         grados: [],
         jornada: "",
-        docente: "",
+        profesor: "",
       },
     };
   },
@@ -216,6 +214,43 @@ export default {
     Multiselect,
   },
   methods: {
+    checkForm: function (e) {
+      e.preventDefault();
+      this.errors = [];
+      if (this.modelCrear.nombre_materia === "") {
+        this.errors.push("El numero materia del producto es obligatorio.");
+      } else if (this.modelCrear.grados == "") {
+        this.errors.push("El grados del producto es obligatorio.");
+      } else if (this.modelCrear.jornada == "") {
+        this.errors.push("El jornada del producto es obligatorio.");
+      } else if (this.modelCrear.profesor == "") {
+        this.errors.push("El jornada del producto es obligatorio.");
+      } else {
+        console.log(this.modelCrear)
+        fetch("http://localhost:4000/api/admin/createMatter", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": this.toke,
+          },
+          body: JSON.stringify(this.modelCrear),
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.error) {
+              this.errors.push(res.error);
+            } else {              
+              this.modelCrear.nombre_materia = "";
+              this.modelCrear.jornada = "";
+              this.modelCrear.grados = "";
+              this.modelCrear.profesor = "";
+              this.showModalCreate = false;
+              alert("Se ha crado la materia");
+              this.refresh();
+            }
+          });
+      }
+    },
     async materias() {
       try {
         const res = await fetch(this.url + "api/admin/getMatter", {
@@ -225,24 +260,30 @@ export default {
           },
         });
         this.tableData = await res.json();
-
-        const docente = await fetch(this.url + "api/admin/getdocentes", {
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": this.toke,
-          },
-        });
-        this.infodocente = await docente.json();
+        console.log(this.tableData);
         if (this.modelCrear.jornada) {
+          const docente = await fetch(
+            this.url + `api/admin/getdocentes/${this.modelCrear.jornada}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "x-access-token": this.toke,
+              },
+            }
+          );
+          this.infodocente = [];
+          this.infodocente = await docente.json();
+          console.log(this.infodocente);
+
           const grados = await fetch(
             this.url + `api/admin/getGradeWorkingDay/${this.modelCrear.jornada}`
           );
+          this.grados = [];
           const data = await grados.json();
           data.forEach((element) => {
             this.grados.push(element.numero_grado);
             console.log(element.numero_grado);
           });
-          
         }
       } catch (error) {
         console.log(error);
@@ -255,19 +296,8 @@ export default {
     },
     async crearMateria() {
       this.showModalCreate = true;
-      console.log(this.modelCrear)
-      // await fetch("http://localhost:4000/api/admin/", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify(this.modelCrear),
-      //   });
-      //   this.showModalCreate = false;
-      //   alert("Se ha crado nuevo usuario");
-      //   this.refresh();
+      console.log(this.modelCrear);
     },
-
     async editar(index) {
       try {
         await fetch(this.url + `api/admin/${index}`, {
@@ -288,7 +318,7 @@ export default {
     async eliminar(index) {
       console.log(index);
       try {
-        await fetch(this.url + `api/admin/${index}`, {
+        await fetch(this.url + `api/admin/deleteMatterId/${index}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -314,7 +344,6 @@ export default {
       // console.log(index)
       router.push(`/verUsuario/${index}`);
     },
-
   },
   computed: {
     ...mapState(["toke"]),
