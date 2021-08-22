@@ -15,50 +15,81 @@
               path: '/dashboard',
             }"
           />
-
           <sidebar-item
             :link="{
               name: 'Actividades',
               icon: 'ni ni-planet text-blue',
               path: '/icons',
             }"
-          />
-          <!-- <sidebar-item
-            :link="{
-              name: 'Maps',
-              icon: 'ni ni-pin-3 text-orange',
-              path: '/maps',
-            }"
-          />
+          /> 
           <sidebar-item
             :link="{
-              name: 'User Profile',
-              icon: 'ni ni-single-02 text-yellow',
-              path: '/profile',
+              name: 'Calendario',
+              icon: 'ni ni-planet text-blue',
+              path: '/icons',
             }"
-          />
+          />  
           <sidebar-item
             :link="{
-              name: 'Tables',
-              icon: 'ni ni-bullet-list-67 text-red',
-              path: '/tables',
+              name: 'Chat',
+              icon: 'ni ni-planet text-blue',
+              path: '/icons',
             }"
-          />
-          <sidebar-item
+          />    <sidebar-item
             :link="{
-              name: 'Login',
-              icon: 'ni ni-key-25 text-info',
-              path: '/login',
+              name: 'Certificados',
+              icon: 'ni ni-planet text-blue',
+              path: '/icons',
             }"
-          />
-          <sidebar-item
-            :link="{
-              name: 'Register',
-              icon: 'ni ni-circle-08 text-pink',
-              path: '/register',
-            }"
-          /> -->
+          />          
         </div>
+        <!-- Menus Docentes -->
+        <div v-if="rol == 'docente'">
+          <sidebar-item
+            :link="{
+              name: 'Notas',
+              icon: 'ni ni-tv-2 text-primary',
+              path: '/GradoNotas',
+            }"
+          />
+          <sidebar-item
+            :link="{
+              name: 'Cursos',
+              icon: 'fab fa-bandcamp text-primary',
+              path: '/cursos',
+            }"
+          />
+          
+          <sidebar-item
+            :link="{
+              name: 'Actividades',
+              icon: 'ni ni-planet text-blue',
+              path: '/icons',
+            }"
+          />   <sidebar-item
+            :link="{
+              name: 'Asistencias',
+              icon: 'ni ni-planet text-blue',
+              path: '/asistencia',
+            }"
+          />   
+          <sidebar-item
+            :link="{
+              name: 'Calendario',
+              icon: 'ni ni-planet text-blue',
+              path: '/calendario',
+            }"
+          />    
+          <sidebar-item
+            :link="{
+              name: 'Chat',
+              icon: 'ni ni-planet text-blue',
+              path: '/icons',
+            }"
+          />         
+        </div>  
+       
+       
         <!--                                        Menu Admin                        -->
 
         <div v-if="rol == 'admin'">

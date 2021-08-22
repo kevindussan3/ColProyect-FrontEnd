@@ -1,0 +1,64 @@
+<template>
+  <div>
+    <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8">
+    <div  >
+      <BaseCard v-for="(item, index) in data" :key="index"  @click="curso(item._id)"> {{item.numero_grado}} </BaseCard>
+    </div>
+     
+    </base-header>
+  </div>
+</template>
+<script>
+// Charts
+
+import { mapActions, mapState } from "vuex";
+import BaseCard from "../../components/BaseButton.vue";
+import router from "../../router";
+
+export default {
+  components: { BaseCard },
+  data() {
+    return {
+      url: this.$store.state.url,
+      data: [],
+      value:"",
+      materia:""
+    };
+  },
+  methods: {
+    ...mapActions(["obtenerToken", "datosUser"]),
+    curso(id){
+      router.push(`/verGrado/${this.materia}&${id}`);
+    },
+    async cursos() {
+      const res = await fetch(this.url + `api/docente/cursos/`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": this.toke,
+        },
+      });
+      const rep = await res.json();
+      console.log(rep)
+      rep.map((value) => {
+        for(let i = 0; i < value.grado.length; i++) {
+          this.data = value.grado
+          this.materia = value.nombre_materia
+        }
+      })      
+    },
+    async refresh() {
+      this.loading = true;
+      this.cursos();
+      this.loading = false;
+    },
+  },
+  async created() {
+    this.refresh();
+  },
+   computed: {
+    ...mapState(["toke"]),
+  },
+  mounted() {},
+};
+</script>
+<style></style>

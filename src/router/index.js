@@ -15,6 +15,16 @@ import Usuarios from "../views/Usuarios.vue";
 import Materia from "../views/materias/view_matters.vue";
 import Grado from "../views/Grado/view_grado.vue";
 
+
+import Cursos from "../views/Docentes/Dashboard.vue"
+import GradoDocente from "../views/Docentes/Grado.vue"
+import VerActividad from "../views/Docentes/VerActividades.vue"
+import Asistencia from "../views/Docentes/Asistencia.vue";
+import Listado from "../views/Docentes/Listado.vue";
+import Calendario from "../views/Docentes/Calendario.vue";
+import Notas from "../views/Docentes/Notas.vue";
+import GradoNotas from "../views/Docentes/GradoNotas.vue";
+
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 
@@ -65,12 +75,48 @@ const routes = [
                 path: "/verUsuario/:id",
                 name: "verUsuario",
                 components: { default: VerUsuario },
+            },{
+                path: "/verGrado/:materia&:id",
+                name: "Grado",
+                components: { default: GradoDocente },
             },
             {
                 path: "/grados",
                 name: "grado",
                 components: { default: Grado },
             },
+            {
+                path: "/cursos",
+                name: "cursos",
+                components: { default: Cursos },
+            }, {
+                path: "/verActividad/:id",
+                name: "ver Actividad",
+                components: { default: VerActividad },
+            },
+            {
+                path: "/asistencia",
+                name: "Asistencia",
+                components: { default: Asistencia },
+            },
+            {
+                path: "/asistencia/:id",
+                name: "Listado",
+                components: {default: Listado}
+            },
+            {
+                path: "/calendario/",
+                name: "Calendario",
+                components: {default: Calendario}
+            },{
+                path: "/notas/:id",
+                name: "Notas",
+                components: {default: Notas }
+            },{
+                path: "/GradoNotas",
+                name: "GradoNotas",
+                components: {default: GradoNotas}
+            }
 
         ],
 

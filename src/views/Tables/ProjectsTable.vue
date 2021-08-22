@@ -131,6 +131,26 @@
                                   <option value="Tarde">Tarde</option>
                                 </select>
                               </div>
+                              <div class="form-group col-md-6" v-if="model.roles === 'estudiante'">
+                                <!-- <label for="inputTelefono4">Telefono</label> -->
+                                <select
+                                  class="form-control"
+                                  v-model="modelCrear.grado"
+                                  
+                                >
+                                  <option value="" selected disabled>
+                                    Seleccione un grado
+                                  </option>
+                                  <option
+                                    v-for="(item, index) in datagrados"
+                                    :key="index"
+                                    v-bind:value="{ _id: item._id }"
+                                  >
+                                    {{ item.numero_grado }}
+                                  </option>
+                                </select>
+                              </div>
+                              
                             </div>
                             <div class="form-row">
                               <div class="form-group col-md-6">
@@ -183,8 +203,15 @@
                                   class="form-control"
                                   v-model="model.roles"
                                 >
-                                  <option selected>{{ model.roles }}</option>
-                                  <option>...</option>
+                                  <option selected disabled>
+                                    {{ model.roles }}
+                                  </option>
+                                  <option
+                                    v-for="(item, index) of ShowRoles"
+                                    :key="index"
+                                  >
+                                    {{ item }}
+                                  </option>
                                 </select>
                               </div>
                               <div class="form-group col-md-2">
@@ -290,12 +317,30 @@
                                 <select
                                   class="form-control"
                                   v-model="modelCrear.jornada"
+                                  @change="usuarios"
                                 >
-                                  <option selected value="">
-                                    Joranada
-                                  </option>
+                                  <option selected value="">Joranada</option>
                                   <option value="Mañana">Mañana</option>
                                   <option value="Tarde">Tarde</option>
+                                </select>
+                              </div>
+                              <div class="form-group col-md-6">
+                                <!-- <label for="inputTelefono4">Telefono</label> -->
+                                <select
+                                  class="form-control"
+                                  v-model="modelCrear.grado"
+                                  requiredsss
+                                >
+                                  <option value="" selected disabled>
+                                    Seleccione un grado
+                                  </option>
+                                  <option
+                                    v-for="(item, index) in datagrados"
+                                    :key="index"
+                                    v-bind:value="{ _id: item._id }"
+                                  >
+                                    {{ item.numero_grado }}
+                                  </option>
                                 </select>
                               </div>
                             </div>
@@ -460,9 +505,11 @@ export default {
         rh: "",
         roles: "Rol",
         jornada: "",
+        grado: "",
       },
       ShowRoles: ["estudiante", "admin", "docente", "acudiente"],
       rol: "",
+      datagrados: [],
     };
   },
   components: {},
@@ -476,10 +523,24 @@ export default {
           },
         });
         this.tableData = await res.json();
+
+        const grados = await fetch(
+          this.url + `api/admin/getGradeWorkingDay/${this.modelCrear.jornada}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "x-access-token": this.toke,
+            },
+          }
+        ); 
+
+        
+        this.datagrados = await grados.json();
       } catch (error) {
         console.log(error);
       }
     },
+
     async refresh() {
       this.loading = true;
       this.usuarios();
@@ -499,6 +560,8 @@ export default {
       this.model.direccion = index.item.direccion;
       this.model.rh = index.item.rh;
       this.rol = index.item.roles[0]._id;
+      console.log(index);
+      console.log(index.item.roles[0].name);
       this.model.roles = index.item.roles[0].name;
       this.model.jornada = index.item.jornada;
     },
@@ -557,7 +620,18 @@ export default {
           },
           body: JSON.stringify(this.modelCrear),
         });
-        this.modelCrear = "";
+        this.modelCrear.nombres = "";
+        this.modelCrear.apellidos = "";
+        this.modelCrear.identificacion = "";
+        this.modelCrear.jornada = "";
+        this.modelCrear.grado = "";
+        this.modelCrear.direccion = "";
+        this.modelCrear.password = "";
+        this.modelCrear.rh = "";
+        this.modelCrear.email = "";
+        this.modelCrear.roles = "Rol";
+        this.modelCrear.telefono = "";
+
         this.showModalCreate = false;
         alert("Se ha crado nuevo usuario");
         this.refresh();
