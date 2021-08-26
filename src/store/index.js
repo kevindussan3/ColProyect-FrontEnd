@@ -6,7 +6,7 @@ import router from '../router'
 export default createStore({
     state: {
         toke: null,
-        url: "http://localhost:4000/"
+        url: "https://apiproyectcol.herokuapp.com/"
     },
     mutations: {
         setToken(state, payload) {

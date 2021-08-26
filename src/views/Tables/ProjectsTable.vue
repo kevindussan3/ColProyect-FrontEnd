@@ -273,6 +273,7 @@
                             </button>
                           </div>
                           <div class="modal-body">
+
                             <div class="form-row">
                               <div class="form-group col-md-6">
                                 <!-- <label for="inputName4">Nombres</label> -->
@@ -293,8 +294,29 @@
                                 />
                               </div>
                             </div>
+
                             <div class="form-row">
-                              <div class="form-group col-md-6">
+                              <div class="form-group col-md-4">
+                                <!-- <label for="inputState">Rol</label> -->
+                                <select
+                                  class="form-control"
+                                  v-model="modelCrear.roles"
+                                >
+                                  <option selected disabled>
+                                    {{ modelCrear.roles }}
+                                  </option>
+                                  <option
+                                    v-for="(item, index) of ShowRoles"
+                                    :key="index"
+                                  >
+                                    {{ item }}
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="form-row">
+                               <div class="form-group col-md-6">
                                 <!-- <label for="inputTelefono4">Telefono</label> -->
                                 <input
                                   type="text"
@@ -312,7 +334,11 @@
                                   v-model="modelCrear.direccion"
                                 />
                               </div>
-                              <div class="form-group col-md-4">
+                            </div>
+
+                            <div class="form-row" v-if="modelCrear.roles == 'estudiante'">
+                             
+                              <div class="form-group col-md-6">
                                 <!-- <label for="inputState">Rol</label> -->
                                 <select
                                   class="form-control"
@@ -345,8 +371,9 @@
                               </div>
                             </div>
 
-                            <div class="column">
-                              <div class="form-group">
+
+                            <div class="row">
+                              <div class="form-group col-md-6">
                                 <!-- <label for="inputEmail2">Email</label>  -->
                                 <input
                                   type="email"
@@ -355,7 +382,7 @@
                                   v-model="modelCrear.email"
                                 />
                               </div>
-                              <div class="form-group">
+                              <div class="form-group col-md-6">
                                 <!-- <label for="inputEmail2">Email</label>  -->
                                 <input
                                   type="password"
@@ -365,6 +392,8 @@
                                 />
                               </div>
                             </div>
+
+
                             <div class="form-row">
                               <div class="form-group col-md-6">
                                 <!-- <label for="inputCity">Identificación</label> -->
@@ -375,23 +404,7 @@
                                   v-model="modelCrear.identificacion"
                                 />
                               </div>
-                              <div class="form-group col-md-4">
-                                <!-- <label for="inputState">Rol</label> -->
-                                <select
-                                  class="form-control"
-                                  v-model="modelCrear.roles"
-                                >
-                                  <option selected disabled>
-                                    {{ modelCrear.roles }}
-                                  </option>
-                                  <option
-                                    v-for="(item, index) of ShowRoles"
-                                    :key="index"
-                                  >
-                                    {{ item }}
-                                  </option>
-                                </select>
-                              </div>
+                              
                               <div class="form-group col-md-2">
                                 <!-- <label for="inputZip">RH</label> -->
                                 <input
@@ -402,7 +415,9 @@
                                 />
                               </div>
                             </div>
+
                           </div>
+
                           <div class="modal-footer">
                             <button
                               type="button"
