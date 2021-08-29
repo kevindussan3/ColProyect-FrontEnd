@@ -181,7 +181,7 @@ export default {
       } else if (this.modelCrear.jornada == "") {
         this.errors.push("El jornada del producto es obligatorio.");
       } else {
-        fetch("http://localhost:4000/api/admin/createGrade", {
+        fetch(this.url + "api/admin/createGrade", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -219,7 +219,7 @@ export default {
     },
     async guardarGrado() {
       try {
-        await fetch("http://localhost:4000/api/admin/createGrade", {
+        await fetch(this.url + "api/admin/createGrade", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

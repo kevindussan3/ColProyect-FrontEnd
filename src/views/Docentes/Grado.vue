@@ -171,7 +171,7 @@ export default {
       } else {
 
       await fetch(
-        `http://localhost:4000/api/actividad/${this.id}&${this.materia}`,
+        this.url + `api/actividad/${this.id}&${this.materia}`,
         {
           mode: "cors",
           method: "POST",
@@ -223,7 +223,7 @@ export default {
     async guardarGrado() {
       try {
         await fetch(
-          `http://localhost:4000/api/actividad/${this.id}&${this.materia}`,
+          this.url + `api/actividad/${this.id}&${this.materia}`,
           {
             method: "POST",
             headers: {

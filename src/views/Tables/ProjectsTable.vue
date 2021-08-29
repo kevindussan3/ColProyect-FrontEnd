@@ -296,7 +296,7 @@
                             </div>
 
                             <div class="form-row">
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-6">
                                 <!-- <label for="inputState">Rol</label> -->
                                 <select
                                   class="form-control"
@@ -313,6 +313,19 @@
                                   </option>
                                 </select>
                               </div>
+                              <div class="form-group col-md-6">
+                                <!-- <label for="inputState">Rol</label> -->
+                                <select
+                                  class="form-control"
+                                  v-model="modelCrear.jornada"
+                                  @change="usuarios"
+                                >
+                                  <option selected value="">Joranada</option>
+                                  <option value="Mañana">Mañana</option>
+                                  <option value="Tarde">Tarde</option>
+                                </select>
+                              </div>
+                              
                             </div>
 
                             <div class="form-row">
@@ -336,20 +349,7 @@
                               </div>
                             </div>
 
-                            <div class="form-row" v-if="modelCrear.roles == 'estudiante'">
-                             
-                              <div class="form-group col-md-6">
-                                <!-- <label for="inputState">Rol</label> -->
-                                <select
-                                  class="form-control"
-                                  v-model="modelCrear.jornada"
-                                  @change="usuarios"
-                                >
-                                  <option selected value="">Joranada</option>
-                                  <option value="Mañana">Mañana</option>
-                                  <option value="Tarde">Tarde</option>
-                                </select>
-                              </div>
+                            <div class="form-row" v-if="modelCrear.roles == 'estudiante'">                                                       
                               <div class="form-group col-md-6">
                                 <!-- <label for="inputTelefono4">Telefono</label> -->
                                 <select
@@ -509,18 +509,18 @@ export default {
         jornada: "",
       },
       modelCrear: {
-        nombres: "",
-        apellidos: "",
-        telefono: "",
-        email: "",
-        identificacion: "",
-        fechaNacimiento: "",
-        direccion: "",
-        password: "",
-        rh: "",
+        nombres: null,
+        apellidos: null,
+        telefono: null,
+        email: null,
+        identificacion: null,
+        fechaNacimiento: null,
+        direccion: null,
+        password: null,
+        rh: null,
         roles: "Rol",
         jornada: "",
-        grado: "",
+        grado: null,
       },
       ShowRoles: ["estudiante", "admin", "docente", "acudiente"],
       rol: "",
@@ -628,7 +628,7 @@ export default {
     async crearUser() {
       console.log(this.modelCrear);
       try {
-        await fetch("http://localhost:4000/api/admin/", {
+        await fetch(this.url +"api/admin/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

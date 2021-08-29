@@ -227,7 +227,7 @@ export default {
         this.errors.push("El jornada del producto es obligatorio.");
       } else {
         console.log(this.modelCrear)
-        fetch("http://localhost:4000/api/admin/createMatter", {
+        fetch(this.url + "api/admin/createMatter", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
