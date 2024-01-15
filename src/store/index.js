@@ -1,19 +1,25 @@
 import { createStore } from "vuex";
 import router from '../router'
+import apiUtils from "../utils/apiUtils";
 
-
+export const SET_TOKEN = 'setToken';
 
 export default createStore({
     state: {
         toke: null,
-        url: "https://apiproyectcol.herokuapp.com/"
+        url: process.env.VUE_APP_URL,
+        errorMessage: null,
     },
     mutations: {
-        setToken(state, payload) {
-            state.toke = payload
-        }
+        [SET_TOKEN](state, payload) {
+            state.toke = payload;
+        },
+        setErrorMessage(state, message) {
+            state.errorMessage = message;
+        },
     },
     actions: {
+        
         async login({ commit }, usuario) {
             try {
                 const res = await fetch(this.state.url + 'api/auth/signin', {
@@ -21,24 +27,27 @@ export default createStore({
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(usuario)
-                })
-                const usuarioDB = await res.json()
-                console.log(usuarioDB.token)
-                    // localStorage.setItem('email', usuario.email)
-                if (usuarioDB.token == null) {
-                    console.log('Error')
-                } else {
-                    commit('setToken', usuarioDB.token)
-                    localStorage.setItem('token2', usuarioDB.token)
+                    body: JSON.stringify(usuario),
+                });
+        
+                if (!res.ok) {
+                    const error = await res.json();
+                    console.log('Error:', error);
+                    commit('setErrorMessage', error.message || 'Hubo un error en la solicitud.');
+                    throw new Error('Credenciales incorrectas');
                 }
-                // this.datosUser(usuario.email)
+        
+                const responseData = await res.json();
+                commit(SET_TOKEN, responseData.data.token);
+                localStorage.setItem('data', JSON.stringify(responseData.data.user));
+                localStorage.setItem('token', responseData.token);
                 router.push({ name: 'Dashboard' }).catch(() => {});
-
+                return apiUtils.handleErrors(res);
             } catch (error) {
-                console.log('error: ', error)
+                console.log('Error:', error);
             }
         },
+        
         async register({ commit }, usuario) {
             try {
 
@@ -73,7 +82,7 @@ export default createStore({
                     }
                 })
                 const usuarioDB = await res.json()
-                const user = usuarioDB;                
+                const user = usuarioDB;
                 return user
             } catch (error) {
                 console.log('error: ', error)
@@ -88,9 +97,13 @@ export default createStore({
         },
 
         cerrarSesion({ commit }) {
-            commit('setToken', null)
-            localStorage.removeItem('token2')
-            localStorage.removeItem('email')
+            // commit('setToken', null)
+            // localStorage.removeItem('token2')
+            // localStorage.removeItem('email')
+
+            commit(SET_TOKEN, null);
+            localStorage.removeItem('data');
+            // router.replace({ name: 'Inicio' }).catch(() => {});
         }
     },
     modules: {}
